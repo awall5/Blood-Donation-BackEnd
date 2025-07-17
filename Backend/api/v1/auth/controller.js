@@ -17,13 +17,11 @@ const userSignupController = async (req, res) => {
     }).lean();
 
     if (user !== null) {
-      res
-        .status(400)
-        .json({
-          isSuccess: false,
-          message: "User already exists! Please Login",
-          data: {},
-        });
+      res.status(400).json({
+        isSuccess: false,
+        message: "User already exists! Please Login",
+        data: {},
+      });
       return;
     }
 
@@ -32,13 +30,11 @@ const userSignupController = async (req, res) => {
     }).lean();
 
     if (sentOtpDoc == null) {
-      res
-        .status(400)
-        .json({
-          isSuccess: false,
-          message: "Please resend the otp!",
-          data: {},
-        });
+      res.status(400).json({
+        isSuccess: false,
+        message: "Please resend the otp!",
+        data: {},
+      });
     }
 
     const { otp: hashedOtp } = sentOtpDoc;
@@ -46,13 +42,11 @@ const userSignupController = async (req, res) => {
     const isCorrect = await bcrypt.compare(otp.toString(), hashedOtp);
 
     if (!isCorrect) {
-      return res
-        .status(400)
-        .json({
-          isSuccess: false,
-          message: "Incorrect otp! Please try again...",
-          data: {},
-        });
+      return res.status(400).json({
+        isSuccess: false,
+        message: "Incorrect otp! Please try again...",
+        data: {},
+      });
     }
 
     await UserModel.create({ email, password });
@@ -103,16 +97,14 @@ const userLoginController = async (req, res) => {
 
     const { password: hashedPassword } = user;
 
-    const isCorrect = await bcrypt.compare(otp.toString(), hashedOtp);
+    const isCorrect = await bcrypt.compare(password, hashedPassword);
 
     if (!isCorrect) {
-      return res
-        .status(400)
-        .json({
-          isSuccess: false,
-          message: "Incorrect password! Please try again...",
-          data: {},
-        });
+      return res.status(400).json({
+        isSuccess: false,
+        message: "Incorrect password! Please try again...",
+        data: {},
+      });
     }
 
     attachJWTToken(res, { email: user.email, _id: user._id });
