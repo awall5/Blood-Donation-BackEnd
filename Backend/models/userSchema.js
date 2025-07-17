@@ -29,10 +29,7 @@ const userSchema = new Schema(
             enum: ["user", "admin", "super-admin"],
             default: "user",
         },
-        imageUrl: {
-            type: String,
-            trim: true,
-        },
+
     },
     {
         versionKey: false,
