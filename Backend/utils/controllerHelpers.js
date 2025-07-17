@@ -19,3 +19,5 @@ const handleGenericAPIError = (funName, req, res, err) => {
     },
   });
 };
+
+module.exports = { handleGenericAPIError };
