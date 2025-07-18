@@ -3,7 +3,7 @@ const Donor = require("../../../models/donorSchema");
 const registerDonorController = async (req, res) => {
   console.log("--> inside registerDonorController");
   try {
-    // add userId from auth (since you have userAuthenticationMiddleware)
+    // add userId from auth  
     const userId = req.user?._id;
 
     const donor = new Donor({
