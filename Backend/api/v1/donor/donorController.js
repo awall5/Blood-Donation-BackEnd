@@ -8,7 +8,7 @@ const registerDonorController = async (req, res) => {
 
     const donor = new Donor({
       ...req.body,
-      user: userId   // optional: link donor to logged-in user
+      user: userId    
     });
 
     await donor.save();
