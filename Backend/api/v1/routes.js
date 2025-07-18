@@ -13,12 +13,11 @@ apiRouter.use("/auth", authRouter);
 apiRouter.use("/all-donor", allBlogRouter);
 
 // auth middleware
-apiRouter.use(userAuthenticationMiddleware); // all routes below this are protected
+apiRouter.use(userAuthenticationMiddleware); 
 
 // protected routes
 apiRouter.use("/users", usersRouter);
-apiRouter.use("/donors", donorRoutes); // new donor routes
-
-apiRouter.use("/requests", requestRoutes); // /api/v1/requests/create
+apiRouter.use("/donors", donorRoutes); 
+apiRouter.use("/requests", requestRoutes); 
 
 module.exports = { apiRouter };
