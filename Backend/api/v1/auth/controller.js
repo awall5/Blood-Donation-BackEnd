@@ -27,7 +27,9 @@ const userSignupController = async (req, res) => {
 
     const sentOtpDoc = await OtpModel.findOne({
       email: email,
-    }).lean();
+    })
+      .sort({ createdAt: -1 })
+      .lean();
 
     if (sentOtpDoc == null) {
       res.status(400).json({
@@ -35,9 +37,16 @@ const userSignupController = async (req, res) => {
         message: "Please resend the otp!",
         data: {},
       });
+      return;
     }
 
     const { otp: hashedOtp } = sentOtpDoc;
+
+    if (!otp) {
+      return res
+        .status(400)
+        .json({ isSuccess: false, message: "OTP is required", data: {} });
+    }
 
     const isCorrect = await bcrypt.compare(otp.toString(), hashedOtp);
 
@@ -50,6 +59,13 @@ const userSignupController = async (req, res) => {
     }
 
     await UserModel.create({ email, password });
+
+    // cleanup any OTPs for this email after successful signup
+    try {
+      await OtpModel.deleteMany({ email });
+    } catch (e) {
+      console.log("Warning: failed to cleanup OTPs", e.message);
+    }
 
     res.status(201).json({
       isSuccess: true,
@@ -70,6 +86,8 @@ const sendOtpController = async (req, res) => {
 
     await sendOtpMail(email, otp);
 
+    // remove any previous OTPs for this email to avoid ambiguity
+    await OtpModel.deleteMany({ email });
     await OtpModel.create({ email, otp });
 
     res.status(201).json({ isSuccess: true, message: "Otp sent!" });
