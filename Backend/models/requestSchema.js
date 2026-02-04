@@ -5,7 +5,7 @@ const requestSchema = new mongoose.Schema({
   bloodGroup: { type: String, required: true },
   contactInfo: { type: String, required: true },
   message: { type: String },
-  requestedBy: { type: mongoose.Schema.Types.ObjectId, ref: "UserModel" },
+  requestedBy: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
   createdAt: { type: Date, default: Date.now }
 });
 
